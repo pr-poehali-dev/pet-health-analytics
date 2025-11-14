@@ -25,14 +25,14 @@ interface Disease {
 }
 
 const organs: Organ[] = [
-  { id: 'heart', name: 'Сердце', status: 'healthy', position: { x: 50, y: 30 }, connections: ['lungs', 'kidneys'] },
-  { id: 'lungs', name: 'Лёгкие', status: 'healthy', position: { x: 40, y: 25 }, connections: ['heart'] },
-  { id: 'liver', name: 'Печень', status: 'attention', position: { x: 55, y: 45 }, connections: ['kidneys', 'stomach'] },
-  { id: 'kidneys', name: 'Почки', status: 'healthy', position: { x: 45, y: 55 }, connections: ['heart', 'liver'] },
-  { id: 'stomach', name: 'Желудок', status: 'healthy', position: { x: 50, y: 40 }, connections: ['liver', 'intestines'] },
-  { id: 'intestines', name: 'Кишечник', status: 'healthy', position: { x: 50, y: 60 }, connections: ['stomach'] },
-  { id: 'brain', name: 'Мозг', status: 'healthy', position: { x: 50, y: 10 }, connections: ['heart', 'eyes'] },
-  { id: 'eyes', name: 'Глаза', status: 'healthy', position: { x: 45, y: 8 }, connections: ['brain'] },
+  { id: 'brain', name: 'Мозг', status: 'healthy', position: { x: 165, y: 85 }, connections: ['heart', 'lungs'] },
+  { id: 'heart', name: 'Сердце', status: 'healthy', position: { x: 200, y: 165 }, connections: ['lungs', 'kidneys', 'liver'] },
+  { id: 'lungs', name: 'Лёгкие', status: 'healthy', position: { x: 220, y: 155 }, connections: ['heart'] },
+  { id: 'liver', name: 'Печень', status: 'attention', position: { x: 240, y: 195 }, connections: ['kidneys', 'stomach', 'heart'] },
+  { id: 'stomach', name: 'Желудок', status: 'healthy', position: { x: 220, y: 210 }, connections: ['liver', 'intestines'] },
+  { id: 'kidneys', name: 'Почки', status: 'healthy', position: { x: 260, y: 220 }, connections: ['heart', 'liver'] },
+  { id: 'intestines', name: 'Кишечник', status: 'healthy', position: { x: 240, y: 250 }, connections: ['stomach'] },
+  { id: 'bones', name: 'Кости', status: 'healthy', position: { x: 300, y: 290 }, connections: [] },
 ];
 
 const diseases: Disease[] = [
@@ -159,52 +159,291 @@ const Index = () => {
                   </div>
 
                   <div className="relative aspect-[4/3] bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl overflow-hidden border border-border/50">
-                    <svg className="w-full h-full" viewBox="0 0 100 100">
+                    <svg className="w-full h-full" viewBox="0 0 500 350" preserveAspectRatio="xMidYMid meet">
+                      <defs>
+                        <filter id="glow">
+                          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                          <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      
+                      <path
+                        d="M 100 100 Q 120 70, 160 70 Q 180 65, 180 80 L 180 90 Q 185 85, 195 90 L 200 100 Q 210 90, 220 95 L 240 110 Q 260 105, 270 115 L 290 125 Q 310 120, 320 130 L 340 145 Q 350 140, 360 150 L 375 165 Q 380 160, 385 170 L 390 185 Q 390 200, 385 210 L 375 225 Q 370 235, 360 240 L 340 250 Q 325 255, 315 265 L 305 280 Q 300 290, 290 295 L 270 305 Q 255 310, 245 300 L 235 285 Q 230 275, 220 270 L 200 260 Q 185 255, 175 245 L 160 230 Q 150 220, 140 210 L 125 195 Q 115 185, 105 175 L 95 160 Q 90 145, 90 130 L 90 115 Q 92 105, 100 100 Z"
+                        fill="hsl(var(--muted))"
+                        fillOpacity="0.3"
+                        stroke="hsl(var(--border))"
+                        strokeWidth="2"
+                        className="transition-all duration-300"
+                      />
+                      
+                      {selectedOrganData && organs.map(organ => {
+                        if (organ.connections.includes(selectedOrgan!)) {
+                          return (
+                            <line
+                              key={`connection-${organ.id}`}
+                              x1={selectedOrganData.position.x}
+                              y1={selectedOrganData.position.y}
+                              x2={organ.position.x}
+                              y2={organ.position.y}
+                              stroke="hsl(var(--primary))"
+                              strokeWidth="2"
+                              className="animate-pulse-slow"
+                              strokeDasharray="5,5"
+                              opacity="0.4"
+                            />
+                          );
+                        }
+                        return null;
+                      })}
+                      
                       {organs.map(organ => {
                         const isSelected = selectedOrgan === organ.id;
                         const isConnected = selectedOrganData?.connections.includes(organ.id);
+                        const statusColor = 
+                          organ.status === 'healthy' ? 'hsl(142 71% 45%)' : 
+                          organ.status === 'attention' ? 'hsl(24 95% 53%)' : 
+                          'hsl(0 84% 60%)';
                         
                         return (
                           <g key={organ.id}>
-                            {selectedOrganData && organ.connections.includes(selectedOrgan!) && (
-                              <line
-                                x1={selectedOrganData.position.x}
-                                y1={selectedOrganData.position.y}
-                                x2={organ.position.x}
-                                y2={organ.position.y}
-                                stroke="currentColor"
-                                strokeWidth="0.3"
-                                className="text-primary/30 animate-pulse-slow"
-                                strokeDasharray="1,1"
+                            {organ.id === 'brain' && (
+                              <ellipse
+                                cx={organ.position.x}
+                                cy={organ.position.y}
+                                rx="28"
+                                ry="22"
+                                className={`cursor-pointer transition-all duration-300 ${
+                                  isSelected ? 'animate-pulse-slow' : ''
+                                }`}
+                                fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                strokeWidth={isSelected ? "3" : "1.5"}
+                                onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                                filter={isSelected ? "url(#glow)" : ""}
                               />
                             )}
                             
-                            <circle
-                              cx={organ.position.x}
-                              cy={organ.position.y}
-                              r={isSelected ? "5" : isConnected ? "4" : "3"}
-                              className={`cursor-pointer transition-all duration-300 ${
-                                isSelected ? 'animate-pulse-slow' : ''
-                              }`}
-                              fill="currentColor"
-                              fillOpacity={isSelected ? "1" : isConnected ? "0.7" : "0.5"}
-                              onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
-                              style={{ 
-                                color: isSelected || isConnected ? 'hsl(var(--primary))' : 
-                                       organ.status === 'healthy' ? 'hsl(142 71% 45%)' : 
-                                       organ.status === 'attention' ? 'hsl(24 95% 53%)' : 
-                                       'hsl(0 84% 60%)'
-                              }}
-                            />
+                            {organ.id === 'heart' && (
+                              <path
+                                d={`M ${organ.position.x} ${organ.position.y + 5} 
+                                    Q ${organ.position.x - 15} ${organ.position.y - 10}, ${organ.position.x} ${organ.position.y - 15}
+                                    Q ${organ.position.x + 15} ${organ.position.y - 10}, ${organ.position.x} ${organ.position.y + 5} Z`}
+                                className={`cursor-pointer transition-all duration-300 ${
+                                  isSelected ? 'animate-pulse-slow' : ''
+                                }`}
+                                fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                strokeWidth={isSelected ? "3" : "1.5"}
+                                onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                                filter={isSelected ? "url(#glow)" : ""}
+                              />
+                            )}
                             
-                            <text
-                              x={organ.position.x}
-                              y={organ.position.y - 7}
-                              textAnchor="middle"
-                              className="text-[3px] font-medium fill-foreground/80 pointer-events-none"
-                            >
-                              {organ.name}
-                            </text>
+                            {organ.id === 'lungs' && (
+                              <>
+                                <ellipse
+                                  cx={organ.position.x - 12}
+                                  cy={organ.position.y}
+                                  rx="12"
+                                  ry="20"
+                                  className={`cursor-pointer transition-all duration-300 ${
+                                    isSelected ? 'animate-pulse-slow' : ''
+                                  }`}
+                                  fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                  fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                  stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                  strokeWidth={isSelected ? "3" : "1.5"}
+                                  onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                                  filter={isSelected ? "url(#glow)" : ""}
+                                />
+                                <ellipse
+                                  cx={organ.position.x + 12}
+                                  cy={organ.position.y}
+                                  rx="12"
+                                  ry="20"
+                                  className="cursor-pointer transition-all duration-300 pointer-events-none"
+                                  fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                  fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                  stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                  strokeWidth={isSelected ? "3" : "1.5"}
+                                  filter={isSelected ? "url(#glow)" : ""}
+                                />
+                              </>
+                            )}
+                            
+                            {organ.id === 'liver' && (
+                              <ellipse
+                                cx={organ.position.x}
+                                cy={organ.position.y}
+                                rx="22"
+                                ry="16"
+                                className={`cursor-pointer transition-all duration-300 ${
+                                  isSelected ? 'animate-pulse-slow' : ''
+                                }`}
+                                fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                strokeWidth={isSelected ? "3" : "1.5"}
+                                onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                                filter={isSelected ? "url(#glow)" : ""}
+                              />
+                            )}
+                            
+                            {organ.id === 'stomach' && (
+                              <ellipse
+                                cx={organ.position.x}
+                                cy={organ.position.y}
+                                rx="18"
+                                ry="20"
+                                className={`cursor-pointer transition-all duration-300 ${
+                                  isSelected ? 'animate-pulse-slow' : ''
+                                }`}
+                                fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                strokeWidth={isSelected ? "3" : "1.5"}
+                                onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                                filter={isSelected ? "url(#glow)" : ""}
+                              />
+                            )}
+                            
+                            {organ.id === 'kidneys' && (
+                              <>
+                                <ellipse
+                                  cx={organ.position.x - 10}
+                                  cy={organ.position.y}
+                                  rx="8"
+                                  ry="14"
+                                  className={`cursor-pointer transition-all duration-300 ${
+                                    isSelected ? 'animate-pulse-slow' : ''
+                                  }`}
+                                  fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                  fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                  stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                  strokeWidth={isSelected ? "3" : "1.5"}
+                                  onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                                  filter={isSelected ? "url(#glow)" : ""}
+                                />
+                                <ellipse
+                                  cx={organ.position.x + 10}
+                                  cy={organ.position.y}
+                                  rx="8"
+                                  ry="14"
+                                  className="cursor-pointer transition-all duration-300 pointer-events-none"
+                                  fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                  fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                  stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                  strokeWidth={isSelected ? "3" : "1.5"}
+                                  filter={isSelected ? "url(#glow)" : ""}
+                                />
+                              </>
+                            )}
+                            
+                            {organ.id === 'intestines' && (
+                              <path
+                                d={`M ${organ.position.x - 20} ${organ.position.y} 
+                                    Q ${organ.position.x - 15} ${organ.position.y + 15}, ${organ.position.x} ${organ.position.y + 18}
+                                    Q ${organ.position.x + 15} ${organ.position.y + 15}, ${organ.position.x + 20} ${organ.position.y}
+                                    Q ${organ.position.x + 15} ${organ.position.y - 10}, ${organ.position.x} ${organ.position.y - 8}
+                                    Q ${organ.position.x - 15} ${organ.position.y - 10}, ${organ.position.x - 20} ${organ.position.y} Z`}
+                                className={`cursor-pointer transition-all duration-300 ${
+                                  isSelected ? 'animate-pulse-slow' : ''
+                                }`}
+                                fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                strokeWidth={isSelected ? "3" : "1.5"}
+                                onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                                filter={isSelected ? "url(#glow)" : ""}
+                              />
+                            )}
+                            
+                            {organ.id === 'bones' && (
+                              <g
+                                className={`cursor-pointer transition-all duration-300 ${
+                                  isSelected ? 'animate-pulse-slow' : ''
+                                }`}
+                                onClick={() => setSelectedOrgan(organ.id === selectedOrgan ? null : organ.id)}
+                              >
+                                <rect
+                                  x={organ.position.x - 15}
+                                  y={organ.position.y}
+                                  width="5"
+                                  height="35"
+                                  rx="2"
+                                  fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                  fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                  stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                  strokeWidth={isSelected ? "2" : "1"}
+                                  filter={isSelected ? "url(#glow)" : ""}
+                                />
+                                <rect
+                                  x={organ.position.x + 10}
+                                  y={organ.position.y}
+                                  width="5"
+                                  height="35"
+                                  rx="2"
+                                  fill={isSelected || isConnected ? 'hsl(var(--primary))' : statusColor}
+                                  fillOpacity={isSelected ? "0.8" : isConnected ? "0.6" : "0.5"}
+                                  stroke={isSelected ? 'hsl(var(--primary))' : statusColor}
+                                  strokeWidth={isSelected ? "2" : "1"}
+                                  filter={isSelected ? "url(#glow)" : ""}
+                                />
+                              </g>
+                            )}
+                            
+                            {!['lungs', 'kidneys', 'bones'].includes(organ.id) && (
+                              <text
+                                x={organ.position.x}
+                                y={organ.position.y - 25}
+                                textAnchor="middle"
+                                className="text-xs font-medium fill-foreground pointer-events-none select-none"
+                                opacity={isSelected || isConnected ? "1" : "0.7"}
+                              >
+                                {organ.name}
+                              </text>
+                            )}
+                            
+                            {organ.id === 'lungs' && (
+                              <text
+                                x={organ.position.x}
+                                y={organ.position.y - 28}
+                                textAnchor="middle"
+                                className="text-xs font-medium fill-foreground pointer-events-none select-none"
+                                opacity={isSelected || isConnected ? "1" : "0.7"}
+                              >
+                                {organ.name}
+                              </text>
+                            )}
+                            
+                            {organ.id === 'kidneys' && (
+                              <text
+                                x={organ.position.x}
+                                y={organ.position.y - 20}
+                                textAnchor="middle"
+                                className="text-xs font-medium fill-foreground pointer-events-none select-none"
+                                opacity={isSelected || isConnected ? "1" : "0.7"}
+                              >
+                                {organ.name}
+                              </text>
+                            )}
+                            
+                            {organ.id === 'bones' && (
+                              <text
+                                x={organ.position.x}
+                                y={organ.position.y - 8}
+                                textAnchor="middle"
+                                className="text-xs font-medium fill-foreground pointer-events-none select-none"
+                                opacity={isSelected || isConnected ? "1" : "0.7"}
+                              >
+                                {organ.name}
+                              </text>
+                            )}
                           </g>
                         );
                       })}
