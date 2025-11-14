@@ -25,14 +25,14 @@ interface Disease {
 }
 
 const organs: Organ[] = [
-  { id: 'brain', name: 'Мозг', status: 'healthy', position: { x: 165, y: 85 }, connections: ['heart', 'lungs'] },
-  { id: 'heart', name: 'Сердце', status: 'healthy', position: { x: 200, y: 165 }, connections: ['lungs', 'kidneys', 'liver'] },
-  { id: 'lungs', name: 'Лёгкие', status: 'healthy', position: { x: 220, y: 155 }, connections: ['heart'] },
-  { id: 'liver', name: 'Печень', status: 'attention', position: { x: 240, y: 195 }, connections: ['kidneys', 'stomach', 'heart'] },
-  { id: 'stomach', name: 'Желудок', status: 'healthy', position: { x: 220, y: 210 }, connections: ['liver', 'intestines'] },
-  { id: 'kidneys', name: 'Почки', status: 'healthy', position: { x: 260, y: 220 }, connections: ['heart', 'liver'] },
-  { id: 'intestines', name: 'Кишечник', status: 'healthy', position: { x: 240, y: 250 }, connections: ['stomach'] },
-  { id: 'bones', name: 'Кости', status: 'healthy', position: { x: 300, y: 290 }, connections: [] },
+  { id: 'brain', name: 'Мозг', status: 'healthy', position: { x: 120, y: 120 }, connections: ['heart', 'lungs'] },
+  { id: 'heart', name: 'Сердце', status: 'healthy', position: { x: 220, y: 180 }, connections: ['lungs', 'kidneys', 'liver'] },
+  { id: 'lungs', name: 'Лёгкие', status: 'healthy', position: { x: 250, y: 170 }, connections: ['heart'] },
+  { id: 'liver', name: 'Печень', status: 'attention', position: { x: 280, y: 200 }, connections: ['kidneys', 'stomach', 'heart'] },
+  { id: 'stomach', name: 'Желудок', status: 'healthy', position: { x: 260, y: 220 }, connections: ['liver', 'intestines'] },
+  { id: 'kidneys', name: 'Почки', status: 'healthy', position: { x: 310, y: 210 }, connections: ['heart', 'liver'] },
+  { id: 'intestines', name: 'Кишечник', status: 'healthy', position: { x: 290, y: 250 }, connections: ['stomach'] },
+  { id: 'bones', name: 'Кости', status: 'healthy', position: { x: 180, y: 320 }, connections: [] },
 ];
 
 const diseases: Disease[] = [
@@ -171,9 +171,73 @@ const Index = () => {
                       </defs>
                       
                       <path
-                        d="M 100 100 Q 120 70, 160 70 Q 180 65, 180 80 L 180 90 Q 185 85, 195 90 L 200 100 Q 210 90, 220 95 L 240 110 Q 260 105, 270 115 L 290 125 Q 310 120, 320 130 L 340 145 Q 350 140, 360 150 L 375 165 Q 380 160, 385 170 L 390 185 Q 390 200, 385 210 L 375 225 Q 370 235, 360 240 L 340 250 Q 325 255, 315 265 L 305 280 Q 300 290, 290 295 L 270 305 Q 255 310, 245 300 L 235 285 Q 230 275, 220 270 L 200 260 Q 185 255, 175 245 L 160 230 Q 150 220, 140 210 L 125 195 Q 115 185, 105 175 L 95 160 Q 90 145, 90 130 L 90 115 Q 92 105, 100 100 Z"
+                        d="M 80 110 
+                           Q 90 100, 110 105 
+                           L 125 110 
+                           Q 130 105, 135 110 
+                           L 140 120
+                           Q 150 115, 160 120
+                           L 180 135
+                           Q 200 130, 220 140
+                           L 250 155
+                           Q 280 150, 310 160
+                           L 340 175
+                           Q 360 172, 375 180
+                           L 385 190
+                           Q 390 188, 392 195
+                           L 392 210
+                           Q 390 220, 385 225
+                           L 375 235
+                           Q 365 245, 355 250
+                           L 340 260
+                           Q 330 265, 325 275
+                           L 320 290
+                           Q 318 305, 315 315
+                           L 310 330
+                           Q 308 340, 302 345
+                           L 295 340
+                           Q 290 335, 288 325
+                           L 285 305
+                           Q 280 295, 270 290
+                           L 255 285
+                           Q 245 288, 240 295
+                           L 235 310
+                           Q 233 325, 228 335
+                           L 222 345
+                           Q 218 348, 212 345
+                           L 208 335
+                           Q 206 320, 205 305
+                           L 200 285
+                           Q 190 275, 175 272
+                           L 160 275
+                           Q 155 280, 152 290
+                           L 148 310
+                           Q 145 325, 140 335
+                           L 133 345
+                           Q 128 347, 122 343
+                           L 118 330
+                           Q 117 315, 118 300
+                           L 120 280
+                           Q 115 270, 105 268
+                           L 95 270
+                           Q 90 275, 87 285
+                           L 83 305
+                           Q 80 320, 75 330
+                           L 68 340
+                           Q 63 342, 58 338
+                           L 55 325
+                           Q 55 310, 58 295
+                           L 62 275
+                           Q 60 260, 55 250
+                           L 48 235
+                           Q 45 220, 48 205
+                           L 52 190
+                           Q 55 175, 60 165
+                           L 65 150
+                           Q 68 135, 72 125
+                           L 80 110 Z"
                         fill="hsl(var(--muted))"
-                        fillOpacity="0.3"
+                        fillOpacity="0.15"
                         stroke="hsl(var(--border))"
                         strokeWidth="2"
                         className="transition-all duration-300"
